@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7596414916488024975}
   - component: {fileID: 4611045974997661290}
   - component: {fileID: 4875026563823407613}
+  - component: {fileID: -6398853362862819399}
   m_Layer: 3
   m_Name: dirt
   m_TagString: Ground
@@ -97,3 +98,14 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!192 &-6398853362862819399
+OcclusionArea:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8255725509144493915}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+  m_IsViewVolume: 1

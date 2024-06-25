@@ -18,10 +18,14 @@ public class ChunkGenerator : MonoBehaviour
     public float ruggedness = 0.1f;
 
     private Transform playerTransform;
+    private float noiseOffsetX;
+    private float noiseOffsetZ;
 
     void Start()
     {
         playerTransform = transform;
+        noiseOffsetX = Random.Range(0f, 1000f); 
+        noiseOffsetZ = Random.Range(0f, 1000f); 
         GenerateChunks();
         CreateBorders();
         SetStaticOccludable();
@@ -49,14 +53,15 @@ public class ChunkGenerator : MonoBehaviour
 
                 if (chunkData.isRugged)
                 {
-                    height = Mathf.RoundToInt(chunkData.height * Mathf.PerlinNoise(x * ruggedness, z * ruggedness));
+                    
+                    height = Mathf.RoundToInt(chunkData.height * Mathf.PerlinNoise((x * ruggedness) + noiseOffsetX, (z * ruggedness) + noiseOffsetZ));
                 }
 
                 for (int y = 0; y < height; y++)
                 {
                     GameObject cubePrefab = chunkData.cubePrefabs[Random.Range(0, chunkData.cubePrefabs.Length)];
                     GameObject cube = Instantiate(cubePrefab, new Vector3(x, y, z) + position, Quaternion.identity);
-                    cube.isStatic = true; // Mark as static for occlusion culling
+                    cube.isStatic = true; 
                 }
             }
         }
@@ -84,19 +89,19 @@ public class ChunkGenerator : MonoBehaviour
         GameObject border = Instantiate(borderPrefab, position, Quaternion.identity);
         border.transform.localScale = scale;
         border.transform.SetParent(transform);
-        border.isStatic = true; // Mark as static for occlusion culling
+        border.isStatic = true; 
     }
 
     void SetStaticOccludable()
     {
         foreach (Transform child in transform)
         {
-            child.gameObject.isStatic = true; // Ensure all children are marked as static
+            child.gameObject.isStatic = true; 
         }
     }
 
     void Update()
     {
-        // Optional: Update logic if needed
+        
     }
 }

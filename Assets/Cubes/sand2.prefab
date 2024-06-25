@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3251293076426040969}
   - component: {fileID: 6678870030957550955}
   - component: {fileID: 119483810002548690}
+  - component: {fileID: -1849847375153864691}
   m_Layer: 3
   m_Name: sand2
   m_TagString: Ground
@@ -98,3 +99,14 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!192 &-1849847375153864691
+OcclusionArea:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4837278059985123134}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+  m_IsViewVolume: 1

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4173742832968347976}
   - component: {fileID: 6845598912857229359}
   - component: {fileID: 525462186067110477}
+  - component: {fileID: -6080240479375798540}
   m_Layer: 3
   m_Name: snow5
   m_TagString: Ground
@@ -98,3 +99,14 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!192 &-6080240479375798540
+OcclusionArea:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3849579708144890019}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+  m_IsViewVolume: 1

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7259363321194894731}
   - component: {fileID: 6672971491195073355}
   - component: {fileID: -6853958025989769477}
+  - component: {fileID: -3483532429011704147}
   m_Layer: 3
   m_Name: grass1
   m_TagString: Ground
@@ -98,3 +99,14 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!192 &-3483532429011704147
+OcclusionArea:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3400530986040665792}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+  m_IsViewVolume: 1
