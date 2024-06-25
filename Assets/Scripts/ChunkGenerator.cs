@@ -16,6 +16,8 @@ public class ChunkGenerator : MonoBehaviour
     public GameObject borderPrefab;
     public float borderHeight = 100f;
     public float ruggedness = 0.1f;
+    public string GameSeed = "Defualt";
+    public int currentSeed = 0;
 
     private Transform playerTransform;
     private float noiseOffsetX;
@@ -24,8 +26,10 @@ public class ChunkGenerator : MonoBehaviour
     void Start()
     {
         playerTransform = transform;
-        noiseOffsetX = Random.Range(0f, 1000f); 
-        noiseOffsetZ = Random.Range(0f, 1000f); 
+        currentSeed = GameSeed.GetHashCode();
+        Random.InitState(currentSeed);
+        noiseOffsetX = Random.Range(0f, 1000f);
+        noiseOffsetZ = Random.Range(0f, 1000f);
         GenerateChunks();
         CreateBorders();
         SetStaticOccludable();
@@ -51,9 +55,10 @@ public class ChunkGenerator : MonoBehaviour
             {
                 int height = chunkData.height;
 
+
                 if (chunkData.isRugged)
                 {
-                    
+
                     height = Mathf.RoundToInt(chunkData.height * Mathf.PerlinNoise((x * ruggedness) + noiseOffsetX, (z * ruggedness) + noiseOffsetZ));
                 }
 
@@ -61,7 +66,7 @@ public class ChunkGenerator : MonoBehaviour
                 {
                     GameObject cubePrefab = chunkData.cubePrefabs[Random.Range(0, chunkData.cubePrefabs.Length)];
                     GameObject cube = Instantiate(cubePrefab, new Vector3(x, y, z) + position, Quaternion.identity);
-                    cube.isStatic = true; 
+                    cube.isStatic = true;
                 }
             }
         }
@@ -89,19 +94,19 @@ public class ChunkGenerator : MonoBehaviour
         GameObject border = Instantiate(borderPrefab, position, Quaternion.identity);
         border.transform.localScale = scale;
         border.transform.SetParent(transform);
-        border.isStatic = true; 
+        border.isStatic = true;
     }
 
     void SetStaticOccludable()
     {
         foreach (Transform child in transform)
         {
-            child.gameObject.isStatic = true; 
+            child.gameObject.isStatic = true;
         }
     }
 
     void Update()
     {
-        
+
     }
 }

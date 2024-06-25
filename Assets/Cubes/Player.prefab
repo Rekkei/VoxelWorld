@@ -169,6 +169,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2709281728324620328}
   - component: {fileID: 8252206088423252417}
+  - component: {fileID: 8759236828331946595}
+  - component: {fileID: 8759236828331946596}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -211,6 +213,54 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &8759236828331946595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5390580653926252128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efac52f24f9d50e4f885d183180bf0c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 6099225638237187408}
+  moveSpeed: 6.49
+  jumpForce: 5
+  crouchScale: 0.75
+  crouchSpeed: 1
+  walkSpeed: 4
+  sprintSpeed: 6
+  acceleration: 10
+  cam: {fileID: 0}
+  sprintFOV: 100
+  jumpKey: 32
+  sprintKey: 306
+  crouchKey: 304
+  groundCheck: {fileID: 6355463765907074404}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
+  groundDistance: 0.2
+  isCrouching: 0
+  isSprinting: 0
+--- !u!114 &8759236828331946596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5390580653926252128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65c0bf443055a3f4b8ef031099fc7064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensX: 200
+  sensY: 200
+  cam: {fileID: 0}
+  orientation: {fileID: 2709281728324620328}
 --- !u!1 &9178169681934882865
 GameObject:
   m_ObjectHideFlags: 0
