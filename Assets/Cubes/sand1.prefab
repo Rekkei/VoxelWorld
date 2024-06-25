@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -4775903833934649026}
   m_Layer: 3
   m_Name: sand1
-  m_TagString: Ground
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,7 +93,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7526398570608063699}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 09568d31215f6ce48a0eae4cda897621, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
