@@ -328,8 +328,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 805419279}
-  - component: {fileID: 805419280}
-  - component: {fileID: 805419281}
   - component: {fileID: 805419282}
   m_Layer: 0
   m_Name: Chunk0
@@ -353,30 +351,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &805419280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805419277}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627e5174e5f17b846b746b41949a73a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &805419281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805419277}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dccd68bc0b4b6fb47b086a7a24bb38c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &805419282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,25 +367,30 @@ MonoBehaviour:
   - cubePrefabs:
     - {fileID: 8255725509144493915, guid: 134b2cd060cbf4349a16cfb4abb04317, type: 3}
     height: 1
+    isRugged: 0
   - cubePrefabs:
     - {fileID: 7526398570608063699, guid: 5d26f4211430cbd4d93c7d0958697f80, type: 3}
     - {fileID: 6150929378332401502, guid: b06c151c348b5454aa5280cd3d9b2d2c, type: 3}
     - {fileID: 3466472432754260709, guid: eddafd30b6b20bf45bd5e87d66f13454, type: 3}
     height: 4
+    isRugged: 1
   - cubePrefabs:
     - {fileID: 2870398418414015622, guid: 0ea95c54d236f2d47af5c1e3c8f6c216, type: 3}
     - {fileID: 8848726107411543796, guid: 656b5141ba3065f4d929de87ba6c6f2a, type: 3}
     - {fileID: 7210637182062383750, guid: cf64bac5e96ddc946846be6837a5135c, type: 3}
     height: 2
+    isRugged: 0
   - cubePrefabs:
     - {fileID: 5074063181294829125, guid: 008db0529d52a9e449fc613c2ec9958b, type: 3}
     - {fileID: 3849579708144890019, guid: d5e0f4fd79beda44385106ab05230c0d, type: 3}
     - {fileID: 7035279682658967347, guid: e7ef2f5ba31ed804fbbe971e4859ff21, type: 3}
     height: 3
+    isRugged: 1
   chunkSize: 10
   borderThickness: 1
   borderPrefab: {fileID: 2562367108365681050, guid: 9f8a29271fbdbf04ca0a1e877184baef, type: 3}
   borderHeight: 100
+  ruggedness: 0.5
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

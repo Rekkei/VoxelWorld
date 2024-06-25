@@ -5,7 +5,7 @@ public class ChunkData
 {
     public GameObject[] cubePrefabs;
     public int height;
-    public bool isRugged; 
+    public bool isRugged;
 }
 
 public class ChunkGenerator : MonoBehaviour
@@ -13,9 +13,9 @@ public class ChunkGenerator : MonoBehaviour
     public ChunkData[] chunks;
     public int chunkSize = 20;
     public float borderThickness = 0.1f;
-    public GameObject borderPrefab; 
-    public float borderHeight = 100f; 
-    public float ruggedness = 0.1f; 
+    public GameObject borderPrefab;
+    public float borderHeight = 100f;
+    public float ruggedness = 0.1f;
 
     private Transform playerTransform;
 
@@ -24,6 +24,7 @@ public class ChunkGenerator : MonoBehaviour
         playerTransform = transform;
         GenerateChunks();
         CreateBorders();
+        SetStaticOccludable();
     }
 
     void GenerateChunks()
@@ -48,14 +49,14 @@ public class ChunkGenerator : MonoBehaviour
 
                 if (chunkData.isRugged)
                 {
-                    
                     height = Mathf.RoundToInt(chunkData.height * Mathf.PerlinNoise(x * ruggedness, z * ruggedness));
                 }
 
                 for (int y = 0; y < height; y++)
                 {
                     GameObject cubePrefab = chunkData.cubePrefabs[Random.Range(0, chunkData.cubePrefabs.Length)];
-                    Instantiate(cubePrefab, new Vector3(x, y, z) + position, Quaternion.identity);
+                    GameObject cube = Instantiate(cubePrefab, new Vector3(x, y, z) + position, Quaternion.identity);
+                    cube.isStatic = true; // Mark as static for occlusion culling
                 }
             }
         }
@@ -72,7 +73,6 @@ public class ChunkGenerator : MonoBehaviour
         float mapWidth = chunkSize;
         float mapHeight = totalHeight;
 
-        
         CreateBorder(new Vector3((mapWidth / 2), borderHeight / 2, (-borderThickness / 2) - 1f), new Vector3(mapWidth, borderHeight, borderThickness)); // Front border
         CreateBorder(new Vector3((mapWidth / 2), borderHeight / 2, (chunkSize - borderThickness / 2) + 1f), new Vector3(mapWidth, borderHeight, borderThickness)); // Back border
         CreateBorder(new Vector3((-borderThickness / 2) - 1f, borderHeight / 2, mapWidth / 2), new Vector3(borderThickness, borderHeight, mapWidth)); // Left border
@@ -83,11 +83,20 @@ public class ChunkGenerator : MonoBehaviour
     {
         GameObject border = Instantiate(borderPrefab, position, Quaternion.identity);
         border.transform.localScale = scale;
-        border.transform.SetParent(transform); 
+        border.transform.SetParent(transform);
+        border.isStatic = true; // Mark as static for occlusion culling
+    }
+
+    void SetStaticOccludable()
+    {
+        foreach (Transform child in transform)
+        {
+            child.gameObject.isStatic = true; // Ensure all children are marked as static
+        }
     }
 
     void Update()
     {
-
+        // Optional: Update logic if needed
     }
 }
