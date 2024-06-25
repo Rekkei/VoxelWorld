@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        Vector3 newPosition = rb.position + movement * Time.deltaTime;
+        Vector3 newPosition = rb.position + movement * moveSpeed * Time.deltaTime;
         rb.MovePosition(newPosition);
     }
 
