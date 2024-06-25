@@ -63,10 +63,10 @@ public class ChunkGenerator : MonoBehaviour
         float mapHeight = totalHeight;
 
         // Create borders around the map
-        CreateBorder(new Vector3((mapWidth / 2), borderHeight / 2, (-borderThickness / 2) - 0.5f), new Vector3(mapWidth, borderHeight, borderThickness)); // Front border
-        CreateBorder(new Vector3((mapWidth / 2), borderHeight / 2, (chunkSize - borderThickness / 2)+0.5f), new Vector3(mapWidth, borderHeight, borderThickness)); // Back border
-        CreateBorder(new Vector3((-borderThickness / 2)-0.5f, borderHeight / 2, mapWidth / 2), new Vector3(borderThickness, borderHeight, mapWidth)); // Left border
-        CreateBorder(new Vector3((chunkSize - borderThickness / 2)+0.5f, borderHeight / 2, mapWidth / 2), new Vector3(borderThickness, borderHeight, mapWidth)); // Right border
+        CreateBorder(new Vector3((mapWidth / 2), borderHeight / 2, (-borderThickness / 2) - 1f), new Vector3(mapWidth, borderHeight, borderThickness)); // Front border
+        CreateBorder(new Vector3((mapWidth / 2), borderHeight / 2, (chunkSize - borderThickness / 2)+1f), new Vector3(mapWidth, borderHeight, borderThickness)); // Back border
+        CreateBorder(new Vector3((-borderThickness / 2)-1f, borderHeight / 2, mapWidth / 2), new Vector3(borderThickness, borderHeight, mapWidth)); // Left border
+        CreateBorder(new Vector3((chunkSize - borderThickness / 2)+1f, borderHeight / 2, mapWidth / 2), new Vector3(borderThickness, borderHeight, mapWidth)); // Right border
     }
 
     void CreateBorder(Vector3 position, Vector3 scale)
