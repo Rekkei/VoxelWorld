@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VertexData = System.Tuple<UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Vector2>;
+using VertexData = System.Tuple<UnityEngine.Vector3, UnityEngine.Vector3, UnityEngine.Vector2, UnityEngine.Vector2>;
 
 public static class MeshUtils {
     public enum BlockType {
         GRASSTOP, GRASSSIDE, DIRT, WATER, STONE, SAND, GOLD, BEDROCK, REDSTONE, DIAMOND, NOCRACK,
         CRACK1, CRACK2, CRACK3, CRACK4, AIR
+    };
+
+    public static int[] blockTypeHealth =
+    { 2, 2, 1, 1, 4, 3, 4, -1, 3, 4, -1, -1, -1, -1, -1, -1
     };
 
     public enum BlockSide { BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK };
@@ -85,7 +89,8 @@ public static class MeshUtils {
                 Vector3 v = meshes[i].vertices[j];
                 Vector3 n = meshes[i].normals[j];
                 Vector2 u = meshes[i].uv[j];
-                VertexData p = new VertexData(v, n, u);
+                Vector2 u2 = meshes[i].uv2[j];
+                VertexData p = new VertexData(v, n, u, u2);
                 if (!pointsHash.Contains(p)) {
                     pointsOrder.Add(p, pIndex);
                     pointsHash.Add(p);
@@ -100,7 +105,8 @@ public static class MeshUtils {
                 Vector3 v = meshes[i].vertices[triPoint];
                 Vector3 n = meshes[i].normals[triPoint];
                 Vector2 u = meshes[i].uv[triPoint];
-                VertexData p = new VertexData(v, n, u);
+                Vector2 u2 = meshes[i].uv2[triPoint];
+                VertexData p = new VertexData(v, n, u, u2);
 
                 int index;
                 pointsOrder.TryGetValue(p, out index);
@@ -119,15 +125,18 @@ public static class MeshUtils {
         List<Vector3> verts = new List<Vector3>();
         List<Vector3> norms = new List<Vector3>();
         List<Vector2> uvs = new List<Vector2>();
+        List<Vector2> uvs2 = new List<Vector2>();
 
         foreach (VertexData v in list.Keys) {
             verts.Add(v.Item1);
             norms.Add(v.Item2);
             uvs.Add(v.Item3);
+            uvs2.Add(v.Item4);
         }
         mesh.vertices = verts.ToArray();
         mesh.normals = norms.ToArray();
         mesh.uv = uvs.ToArray();
+        mesh.uv2 = uvs2.ToArray();
     }
 
 }

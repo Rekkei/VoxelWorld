@@ -22,18 +22,30 @@ public class Chunk : MonoBehaviour
     //y = (i / WIDTH) % HEIGHT
     //z = i / (WIDTH * HEIGHT )
     public MeshUtils.BlockType[] chunkData;
+    public MeshUtils.BlockType[] healthData;
+    public MeshRenderer meshRenderer;
 
-    void BuildChunk()
+    CalculateBlockTypes calculateBlockTypes;
+    JobHandle jobHandle;
+
+    struct CalculateBlockTypes : IJobParallelFor
     {
-        int blockCount = width * depth * height;
-        chunkData = new MeshUtils.BlockType[blockCount];
-        for (int i = 0; i < blockCount; i++)
+        public NativeArray<MeshUtils.BlockType> cData;
+        public NativeArray<MeshUtils.BlockType> hData;
+        public int width;
+        public int height;
+        public Vector3 location;
+        public Unity.Mathematics.Random random;
+
+        public void Execute(int i)
         {
             int x = i % width + (int)location.x;
             int y = (i / width) % height + (int)location.y;
             int z = i / (width * height) + (int)location.z;
 
-            int surfaceHeight = (int) MeshUtils.fBM(x, z, World.surfaceSettings.octaves,
+            random = new Unity.Mathematics.Random(1);
+
+            int surfaceHeight = (int)MeshUtils.fBM(x, z, World.surfaceSettings.octaves,
                                                    World.surfaceSettings.scale, World.surfaceSettings.heightScale,
                                                    World.surfaceSettings.heightOffset);
 
@@ -53,33 +65,57 @@ public class Chunk : MonoBehaviour
                            World.caveSettings.scale, World.caveSettings.heightScale,
                            World.caveSettings.heightOffset);
 
+            hData[i] = MeshUtils.BlockType.NOCRACK;
+
             if (y == 0)
             {
-                chunkData[i] = MeshUtils.BlockType.BEDROCK;
-                continue;
+                cData[i] = MeshUtils.BlockType.BEDROCK;
+                return;
             }
 
             if (digCave < World.caveSettings.probability)
             {
-                chunkData[i] = MeshUtils.BlockType.AIR;
-                continue;
+                cData[i] = MeshUtils.BlockType.AIR;
+                return;
             }
 
             if (surfaceHeight == y)
             {
-                chunkData[i] = MeshUtils.BlockType.GRASSSIDE;
+                cData[i] = MeshUtils.BlockType.GRASSSIDE;
             }
-            else if(y < diamondTHeight && y > diamondBHeight && UnityEngine.Random.Range(0.0f, 1.0f) <= World.diamondTSettings.probability)
-                chunkData[i] = MeshUtils.BlockType.DIAMOND;
-            else if(y < stoneHeight && UnityEngine.Random.Range(0.0f,1.0f) <= World.stoneSettings.probability)
-                chunkData[i] = MeshUtils.BlockType.STONE;
+            else if (y < diamondTHeight && y > diamondBHeight && random.NextFloat(1) <= World.diamondTSettings.probability)
+                cData[i] = MeshUtils.BlockType.DIAMOND;
+            else if (y < stoneHeight && random.NextFloat(1) <= World.stoneSettings.probability)
+                cData[i] = MeshUtils.BlockType.STONE;
             else if (y < surfaceHeight)
-                chunkData[i] = MeshUtils.BlockType.DIRT;
+                cData[i] = MeshUtils.BlockType.DIRT;
             else
-                chunkData[i] = MeshUtils.BlockType.AIR;
-
-
+                cData[i] = MeshUtils.BlockType.AIR;
         }
+    }
+
+    void BuildChunk()
+    {
+        int blockCount = width * depth * height;
+        chunkData = new MeshUtils.BlockType[blockCount];
+        healthData = new MeshUtils.BlockType[blockCount];
+        NativeArray<MeshUtils.BlockType> blockTypes = new NativeArray<MeshUtils.BlockType>(chunkData, Allocator.Persistent);
+        NativeArray<MeshUtils.BlockType> healthTypes = new NativeArray<MeshUtils.BlockType>(healthData, Allocator.Persistent);
+        calculateBlockTypes = new CalculateBlockTypes()
+        {
+            cData = blockTypes,
+            hData = healthTypes,
+            width = width,
+            height = height,
+            location = location
+        };
+
+        jobHandle = calculateBlockTypes.Schedule(chunkData.Length, 64);
+        jobHandle.Complete();
+        calculateBlockTypes.cData.CopyTo(chunkData);
+        calculateBlockTypes.hData.CopyTo(healthData);
+        blockTypes.Dispose();
+        healthTypes.Dispose();
     }
 
     // Start is called before the first frame update
@@ -88,20 +124,20 @@ public class Chunk : MonoBehaviour
 
     }
 
-    public void CreateChunk(Vector3 dimensions, Vector3 position)
+    public void CreateChunk(Vector3 dimensions, Vector3 position, bool rebuildBlocks = true)
     {
         location = position;
         width = (int) dimensions.x;
         height = (int)dimensions.y;
         depth = (int)dimensions.z;
 
-
-
         MeshFilter mf = this.gameObject.AddComponent<MeshFilter>();
         MeshRenderer mr = this.gameObject.AddComponent<MeshRenderer>();
+        meshRenderer = mr;
         mr.material = atlas;
         blocks = new Block[width, height, depth];
-        BuildChunk();
+        if(rebuildBlocks)
+            BuildChunk();
 
         var inputMeshes = new List<Mesh>();
         int vertexStart = 0;
@@ -119,7 +155,7 @@ public class Chunk : MonoBehaviour
             {
                 for (int x = 0; x < width; x++)
                 {
-                    blocks[x, y, z] = new Block(new Vector3(x, y, z) + location, chunkData[x + width * (y + depth * z)], this);
+                    blocks[x, y, z] = new Block(new Vector3(x, y, z) + location, chunkData[x + width * (y + depth * z)], this, healthData[x + width * (y + depth * z)]);
                     if (blocks[x, y, z].mesh != null)
                     {
                         inputMeshes.Add(blocks[x, y, z].mesh);
@@ -142,7 +178,8 @@ public class Chunk : MonoBehaviour
         jobs.outputMesh.SetVertexBufferParams(vertexStart,
             new VertexAttributeDescriptor(VertexAttribute.Position),
             new VertexAttributeDescriptor(VertexAttribute.Normal, stream: 1),
-            new VertexAttributeDescriptor(VertexAttribute.TexCoord0, stream: 2));
+            new VertexAttributeDescriptor(VertexAttribute.TexCoord0, stream: 2),
+            new VertexAttributeDescriptor(VertexAttribute.TexCoord1, stream: 3));
 
         var handle = jobs.Schedule(inputMeshes.Count, 4);
         var newMesh = new Mesh();
@@ -189,20 +226,26 @@ public class Chunk : MonoBehaviour
             var uvs = new NativeArray<float3>(vCount, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
             data.GetUVs(0, uvs.Reinterpret<Vector3>());
 
+            var uvs2 = new NativeArray<float3>(vCount, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+            data.GetUVs(1, uvs2.Reinterpret<Vector3>());
+
             var outputVerts = outputMesh.GetVertexData<Vector3>();
             var outputNormals = outputMesh.GetVertexData<Vector3>(stream: 1);
             var outputUVs = outputMesh.GetVertexData<Vector3>(stream: 2);
+            var outputUVs2 = outputMesh.GetVertexData<Vector3>(stream: 3);
 
             for (int i = 0; i < vCount; i++)
             {
                 outputVerts[i + vStart] = verts[i];
                 outputNormals[i + vStart] = normals[i];
                 outputUVs[i + vStart] = uvs[i];
+                outputUVs2[i + vStart] = uvs2[i];
             }
 
             verts.Dispose();
             normals.Dispose();
             uvs.Dispose();
+            uvs2.Dispose();
 
             var tStart = triStart[index];
             var tCount = data.GetSubMesh(0).indexCount;

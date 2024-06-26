@@ -6,7 +6,7 @@ public class Quad
 {
 	public Mesh mesh;
 
-	public Quad(MeshUtils.BlockSide side, Vector3 offset, MeshUtils.BlockType bType)
+	public Quad(MeshUtils.BlockSide side, Vector3 offset, MeshUtils.BlockType bType, MeshUtils.BlockType hType)
     {
 
         mesh = new Mesh();
@@ -17,6 +17,12 @@ public class Quad
         Vector2[] uvs = new Vector2[4];
         int[] triangles = new int[6];
 		triangles = new int[] { 3, 1, 0, 3, 2, 1 };
+
+		List<Vector2> suvs = new List<Vector2>();
+		suvs.Add(MeshUtils.blockUVs[(int)hType, 3]);
+		suvs.Add(MeshUtils.blockUVs[(int)hType, 2]);
+		suvs.Add(MeshUtils.blockUVs[(int)hType, 0]);
+		suvs.Add(MeshUtils.blockUVs[(int)hType, 1]);
 
 		Vector2 uv00 = MeshUtils.blockUVs[(int)bType, 0];
         Vector2 uv10 = MeshUtils.blockUVs[(int)bType, 1];
@@ -82,6 +88,7 @@ public class Quad
         mesh.normals = normals;
         mesh.uv = uvs;
         mesh.triangles = triangles;
+		mesh.SetUVs(1, suvs);
 
         mesh.RecalculateBounds();
     }
