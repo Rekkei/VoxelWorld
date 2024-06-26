@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 6708825954247295257}
   - component: {fileID: 237732462294808477}
   - component: {fileID: 8683790626769991784}
+  - component: {fileID: -5221284079226807078}
   m_Layer: 3
   m_Name: snow1
-  m_TagString: Ground
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92,9 +93,20 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5074063181294829125}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 09568d31215f6ce48a0eae4cda897621, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!192 &-5221284079226807078
+OcclusionArea:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5074063181294829125}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+  m_IsViewVolume: 1
