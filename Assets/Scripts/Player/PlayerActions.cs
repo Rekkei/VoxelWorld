@@ -13,15 +13,13 @@ public class PlayerActions : MonoBehaviour
 
     [Header("Temporary")]
     public GameObject destroyEffectPrefab;
-    [SerializeField] private ActionBar actionBar;
-
-    public GameObject selectedBlock;
+    public GameObject selectedBlock = null;
 
     private static bool canAct = true;
 
     private void Start()
     {
-        selectedBlock = actionBar.blockPrefabs[0];
+        selectedBlock = null; // Initially, no block is selected
     }
 
     void Update()
@@ -72,6 +70,8 @@ public class PlayerActions : MonoBehaviour
 
     private void PlaceObject(Vector3 position, Vector3 normal)
     {
+        if (selectedBlock == null) return;
+
         Vector3 placePosition = position + normal * 0.5f;
         placePosition = new Vector3(
                 Mathf.Round(placePosition.x),
