@@ -187,7 +187,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5390580653926252128}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.575, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -277,15 +277,8 @@ MonoBehaviour:
   attackKey: 323
   placeKey: 324
   highlightMaterial: {fileID: 2100000, guid: fbf9b5aedc359ce4ba9453275a2aa7ca, type: 2}
-  blockPrefabs:
-  - {fileID: 8255725509144493915, guid: 134b2cd060cbf4349a16cfb4abb04317, type: 3}
-  - {fileID: 3400530986040665792, guid: 1879732de5c70a44ebb812c75255d2ac, type: 3}
-  - {fileID: 2870398418414015622, guid: 0ea95c54d236f2d47af5c1e3c8f6c216, type: 3}
-  - {fileID: 7210637182062383750, guid: cf64bac5e96ddc946846be6837a5135c, type: 3}
-  - {fileID: 8848726107411543796, guid: 656b5141ba3065f4d929de87ba6c6f2a, type: 3}
-  - {fileID: 7526398570608063699, guid: 5d26f4211430cbd4d93c7d0958697f80, type: 3}
-  - {fileID: 4837278059985123134, guid: 08410042140834c41a03bb82adb16fdb, type: 3}
-  - {fileID: 3466472432754260709, guid: eddafd30b6b20bf45bd5e87d66f13454, type: 3}
+  destroyEffectPrefab: {fileID: 6676908910155624317, guid: 5de9301094e995c4c9bdb1f94a4b8817, type: 3}
+  actionBar: {fileID: 0}
   selectedBlock: {fileID: 8255725509144493915, guid: 134b2cd060cbf4349a16cfb4abb04317, type: 3}
 --- !u!1 &9178169681934882865
 GameObject:
