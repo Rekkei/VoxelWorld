@@ -171,6 +171,9 @@ GameObject:
   - component: {fileID: 8252206088423252417}
   - component: {fileID: 8759236828331946595}
   - component: {fileID: 8759236828331946596}
+  - component: {fileID: 493765200157024287}
+  - component: {fileID: 2410307558889847918}
+  - component: {fileID: 8759236828331946598}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -261,6 +264,79 @@ MonoBehaviour:
   sensY: 200
   cam: {fileID: 0}
   orientation: {fileID: 2709281728324620328}
+--- !u!114 &493765200157024287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5390580653926252128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efac52f24f9d50e4f885d183180bf0c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 6099225638237187408}
+  moveSpeed: 6.49
+  jumpForce: 5
+  crouchScale: 0.75
+  crouchSpeed: 1
+  walkSpeed: 4
+  sprintSpeed: 6
+  acceleration: 10
+  cam: {fileID: 0}
+  sprintFOV: 100
+  jumpKey: 32
+  sprintKey: 306
+  crouchKey: 304
+  groundCheck: {fileID: 6355463765907074404}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
+  groundDistance: 0.2
+  isCrouching: 0
+  isSprinting: 0
+--- !u!114 &2410307558889847918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5390580653926252128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65c0bf443055a3f4b8ef031099fc7064, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensX: 200
+  sensY: 200
+  cam: {fileID: 0}
+  orientation: {fileID: 2709281728324620328}
+--- !u!114 &8759236828331946598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5390580653926252128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 199dcda19f0ff1f4393200f280400b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackKey: 323
+  placeKey: 324
+  highlightMaterial: {fileID: 2100000, guid: fbf9b5aedc359ce4ba9453275a2aa7ca, type: 2}
+  blockPrefabs:
+  - {fileID: 8255725509144493915, guid: 134b2cd060cbf4349a16cfb4abb04317, type: 3}
+  - {fileID: 3400530986040665792, guid: 1879732de5c70a44ebb812c75255d2ac, type: 3}
+  - {fileID: 2870398418414015622, guid: 0ea95c54d236f2d47af5c1e3c8f6c216, type: 3}
+  - {fileID: 7210637182062383750, guid: cf64bac5e96ddc946846be6837a5135c, type: 3}
+  - {fileID: 8848726107411543796, guid: 656b5141ba3065f4d929de87ba6c6f2a, type: 3}
+  - {fileID: 7526398570608063699, guid: 5d26f4211430cbd4d93c7d0958697f80, type: 3}
+  - {fileID: 4837278059985123134, guid: 08410042140834c41a03bb82adb16fdb, type: 3}
+  - {fileID: 3466472432754260709, guid: eddafd30b6b20bf45bd5e87d66f13454, type: 3}
+  selectedBlock: {fileID: 8255725509144493915, guid: 134b2cd060cbf4349a16cfb4abb04317, type: 3}
 --- !u!1 &9178169681934882865
 GameObject:
   m_ObjectHideFlags: 0

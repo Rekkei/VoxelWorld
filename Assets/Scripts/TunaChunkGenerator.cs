@@ -6,6 +6,7 @@ public class ChunkData
     public GameObject[] cubePrefabs;
     public int height;
     public bool isRugged;
+    public float ruggedness; 
 }
 
 public class ChunkGenerator : MonoBehaviour
@@ -15,8 +16,7 @@ public class ChunkGenerator : MonoBehaviour
     public float borderThickness = 0.1f;
     public GameObject borderPrefab;
     public float borderHeight = 100f;
-    public float ruggedness = 0.1f;
-    public string GameSeed = "Defualt";
+    public string GameSeed = "Default";
     public int currentSeed = 0;
 
     private Transform playerTransform;
@@ -42,24 +42,23 @@ public class ChunkGenerator : MonoBehaviour
         for (int i = 0; i < chunks.Length; i++)
         {
             Vector3 chunkPosition = Vector3.up * totalHeight;
-            GenerateChunk(chunks[i], chunkPosition);
+            GenerateChunk(chunks[i], chunkPosition, i == chunks.Length - 1);
             totalHeight += chunks[i].height;
         }
     }
 
-    void GenerateChunk(ChunkData chunkData, Vector3 position)
+    void GenerateChunk(ChunkData chunkData, Vector3 position, bool isLastChunk)
     {
         for (int x = 0; x < chunkSize; x++)
         {
             for (int z = 0; z < chunkSize; z++)
             {
+                bool isEdge = !isLastChunk && (x == 0 || x == chunkSize - 1 || z == 0 || z == chunkSize - 1);
                 int height = chunkData.height;
 
-
-                if (chunkData.isRugged)
+                if (chunkData.isRugged && !isEdge)
                 {
-
-                    height = Mathf.RoundToInt(chunkData.height * Mathf.PerlinNoise((x * ruggedness) + noiseOffsetX, (z * ruggedness) + noiseOffsetZ));
+                    height = Mathf.RoundToInt(chunkData.height * Mathf.PerlinNoise((x * chunkData.ruggedness) + noiseOffsetX, (z * chunkData.ruggedness) + noiseOffsetZ));
                 }
 
                 for (int y = 0; y < height; y++)
