@@ -2023,10 +2023,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 640, y: 360}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -2090,14 +2090,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemSlots:
+  - {fileID: 1953435053}
+  - {fileID: 271507409}
+  - {fileID: 512556555}
+  - {fileID: 1536086518}
+  - {fileID: 2103693337}
+  - {fileID: 1726775806}
+  - {fileID: 1329606124}
+  - {fileID: 1006204540}
+  blockPrefabs:
   - {fileID: 8255725509144493915, guid: 134b2cd060cbf4349a16cfb4abb04317, type: 3}
   - {fileID: 3400530986040665792, guid: 1879732de5c70a44ebb812c75255d2ac, type: 3}
   - {fileID: 2870398418414015622, guid: 0ea95c54d236f2d47af5c1e3c8f6c216, type: 3}
   - {fileID: 7210637182062383750, guid: cf64bac5e96ddc946846be6837a5135c, type: 3}
   - {fileID: 8848726107411543796, guid: 656b5141ba3065f4d929de87ba6c6f2a, type: 3}
-  - {fileID: 8643422607071844686, guid: 5d9020f4b8c36114a99c6a2a8efa716b, type: 3}
-  - {fileID: 5074063181294829125, guid: 008db0529d52a9e449fc613c2ec9958b, type: 3}
+  - {fileID: 9166618189238147916, guid: 8bc985ebeb4f83342a9919c3beec644f, type: 3}
   - {fileID: 6150929378332401502, guid: b06c151c348b5454aa5280cd3d9b2d2c, type: 3}
+  - {fileID: 8643422607071844686, guid: 5d9020f4b8c36114a99c6a2a8efa716b, type: 3}
   playerActions: {fileID: 731327509}
 --- !u!1 &1508857924
 GameObject:

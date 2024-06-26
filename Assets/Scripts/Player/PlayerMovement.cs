@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public bool isCrouching;
     [HideInInspector] public bool isSprinting;
 
+    private static bool canMove = true;
 
     void Start()
     {
@@ -50,39 +51,49 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        MyInput();
-        ControlSpeed();
-
-        if (Input.GetKeyDown(jumpKey))
+        if (canMove)
         {
-            Jump();
-        }
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if (Input.GetKeyDown(crouchKey) && !isCrouching)
-        {
-            Crouch();
-        }
-        else if (Input.GetKeyUp(crouchKey) && isCrouching)
-        {
-            UnCrouch();
-        }
+            MyInput();
+            ControlSpeed();
 
-        if (isSprinting)
-        {
-            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, sprintFOV, 8f * Time.deltaTime);
-        }
-        else
-        {
-            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 90f, 8f * Time.deltaTime);
-        }
+            if (Input.GetKeyDown(jumpKey))
+            {
+                Jump();
+            }
 
+            if (Input.GetKeyDown(crouchKey) && !isCrouching)
+            {
+                Crouch();
+            }
+            else if (Input.GetKeyUp(crouchKey) && isCrouching)
+            {
+                UnCrouch();
+            }
+
+            if (isSprinting)
+            {
+                cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, sprintFOV, 8f * Time.deltaTime);
+            }
+            else
+            {
+                cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 90f, 8f * Time.deltaTime);
+            }
+        }
     }
 
     private void FixedUpdate()
     {
-        Move();
+        if (canMove)
+        {
+            Move();
+        }
+    }
+
+    public static void EnableMovement(bool enable)
+    {
+        canMove = enable;
     }
 
     void MyInput()

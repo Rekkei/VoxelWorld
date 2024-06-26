@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Block
+  - ActionBarSlot
+  - InventorySlot
   layers:
   - Default
   - TransparentFX

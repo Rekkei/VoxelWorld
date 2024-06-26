@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class ActionBar : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class ActionBar : MonoBehaviour
 
     void Start()
     {
+        playerActions.selectedBlock = blockPrefabs[selectedIndex];
         itemSlots[selectedIndex].GetComponent<Image>().color = Color.yellow;
         UpdateItemSlotTexts();
     }
