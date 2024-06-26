@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f01cccb2c080ea45b4d365239347695, type: 3}
   m_Name: dirt 4
   m_EditorClassIdentifier: 
+  itemName: snow
   sprite: {fileID: 1220149751, guid: 383aef37898fa624db3efdbee6c0df52, type: 3}
+  prefab: {fileID: 5074063181294829125, guid: 008db0529d52a9e449fc613c2ec9958b, type: 3}
   itemTag: 0
-  equipmentPrefab: {fileID: 5074063181294829125, guid: 008db0529d52a9e449fc613c2ec9958b, type: 3}

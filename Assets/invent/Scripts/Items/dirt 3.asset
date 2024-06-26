@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f01cccb2c080ea45b4d365239347695, type: 3}
   m_Name: dirt 3
   m_EditorClassIdentifier: 
+  itemName: grass
   sprite: {fileID: 1400158375, guid: 383aef37898fa624db3efdbee6c0df52, type: 3}
+  prefab: {fileID: 3400530986040665792, guid: 1879732de5c70a44ebb812c75255d2ac, type: 3}
   itemTag: 0
-  equipmentPrefab: {fileID: 919132149155446097, guid: 6cfdfe6bf8a7db04c861e14b5ed3b23c, type: 3}

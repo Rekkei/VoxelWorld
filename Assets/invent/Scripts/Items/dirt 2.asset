@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f01cccb2c080ea45b4d365239347695, type: 3}
   m_Name: dirt 2
   m_EditorClassIdentifier: 
+  itemName: sand
   sprite: {fileID: 1435527331, guid: 383aef37898fa624db3efdbee6c0df52, type: 3}
+  prefab: {fileID: 7526398570608063699, guid: 5d26f4211430cbd4d93c7d0958697f80, type: 3}
   itemTag: 0
-  equipmentPrefab: {fileID: 3400530986040665792, guid: 1879732de5c70a44ebb812c75255d2ac, type: 3}
