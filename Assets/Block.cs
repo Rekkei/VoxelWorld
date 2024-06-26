@@ -10,21 +10,35 @@ public class Block {
     public Block(Vector3 offset, MeshUtils.BlockType type, Chunk chunk)
     {
         parentChunk = chunk;
+        Vector3 blockLocalPos = offset - chunk.location;
 
         if (type != MeshUtils.BlockType.AIR)
         {
             List<Quad> quads = new List<Quad>();
-            if (!HasSolidNeighbour((int)offset.x, (int)offset.y - 1, (int)offset.z))
-                quads.Add(new Quad(MeshUtils.BlockSide.BOTTOM, offset, type));
-            if (!HasSolidNeighbour((int)offset.x, (int)offset.y + 1, (int)offset.z))
-                quads.Add(new Quad(MeshUtils.BlockSide.TOP, offset, type));
-            if (!HasSolidNeighbour((int)offset.x - 1, (int)offset.y, (int)offset.z))
+            if (!HasSolidNeighbour((int)blockLocalPos.x, (int)blockLocalPos.y - 1, (int)blockLocalPos.z))
+            {
+                if (type == MeshUtils.BlockType.GRASSSIDE)
+                    quads.Add(new Quad(MeshUtils.BlockSide.BOTTOM, offset, MeshUtils.BlockType.DIRT));
+                else
+                    quads.Add(new Quad(MeshUtils.BlockSide.BOTTOM, offset, type));
+            }
+
+            if (!HasSolidNeighbour((int)blockLocalPos.x, (int)blockLocalPos.y + 1, (int)blockLocalPos.z))
+            {
+                if(type == MeshUtils.BlockType.GRASSSIDE) 
+                    quads.Add(new Quad(MeshUtils.BlockSide.TOP, offset, MeshUtils.BlockType.GRASSTOP));
+                else
+                    quads.Add(new Quad(MeshUtils.BlockSide.TOP, offset, type));
+            }
+
+
+            if (!HasSolidNeighbour((int)blockLocalPos.x - 1, (int)blockLocalPos.y, (int)blockLocalPos.z))
                 quads.Add(new Quad(MeshUtils.BlockSide.LEFT, offset, type));
-            if (!HasSolidNeighbour((int)offset.x + 1, (int)offset.y, (int)offset.z))
+            if (!HasSolidNeighbour((int)blockLocalPos.x + 1, (int)blockLocalPos.y, (int)blockLocalPos.z))
                 quads.Add(new Quad(MeshUtils.BlockSide.RIGHT, offset, type));
-            if (!HasSolidNeighbour((int)offset.x, (int)offset.y, (int)offset.z + 1))
+            if (!HasSolidNeighbour((int)blockLocalPos.x, (int)blockLocalPos.y, (int)blockLocalPos.z + 1))
                 quads.Add(new Quad(MeshUtils.BlockSide.FRONT, offset, type));
-            if (!HasSolidNeighbour((int)offset.x, (int)offset.y, (int)offset.z - 1))
+            if (!HasSolidNeighbour((int)blockLocalPos.x, (int)blockLocalPos.y, (int)blockLocalPos.z - 1))
                 quads.Add(new Quad(MeshUtils.BlockSide.BACK, offset, type));
 
             if (quads.Count == 0) return;

@@ -6,7 +6,7 @@ public class ChunkData
     public GameObject[] cubePrefabs;
     public int height;
     public bool isRugged;
-    public float ruggedness; 
+    public float ruggedness;
 }
 
 public class ChunkGenerator : MonoBehaviour

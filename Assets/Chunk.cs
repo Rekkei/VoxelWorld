@@ -14,8 +14,13 @@ public class Chunk : MonoBehaviour
     public int height = 2;
     public int depth = 2;
 
+    public Vector3 location;
+
     public Block[,,] blocks;
     //Flat[x + WIDTH * (y + DEPTH * z)] = Original[x, y, z]
+    //x = i % WIDTH
+    //y = (i / WIDTH) % HEIGHT
+    //z = i / (WIDTH * HEIGHT )
     public MeshUtils.BlockType[] chunkData;
 
     void BuildChunk()
@@ -24,16 +29,74 @@ public class Chunk : MonoBehaviour
         chunkData = new MeshUtils.BlockType[blockCount];
         for (int i = 0; i < blockCount; i++)
         {
-            if(UnityEngine.Random.Range(0,100) < 50)
+            int x = i % width + (int)location.x;
+            int y = (i / width) % height + (int)location.y;
+            int z = i / (width * height) + (int)location.z;
+
+            int surfaceHeight = (int) MeshUtils.fBM(x, z, World.surfaceSettings.octaves,
+                                                   World.surfaceSettings.scale, World.surfaceSettings.heightScale,
+                                                   World.surfaceSettings.heightOffset);
+
+            int stoneHeight = (int)MeshUtils.fBM(x, z, World.stoneSettings.octaves,
+                                                   World.stoneSettings.scale, World.stoneSettings.heightScale,
+                                                   World.stoneSettings.heightOffset);
+
+            int diamondTHeight = (int)MeshUtils.fBM(x, z, World.diamondTSettings.octaves,
+                                       World.diamondTSettings.scale, World.diamondTSettings.heightScale,
+                                       World.diamondTSettings.heightOffset);
+
+            int diamondBHeight = (int)MeshUtils.fBM(x, z, World.diamondBSettings.octaves,
+                           World.diamondBSettings.scale, World.diamondBSettings.heightScale,
+                           World.diamondBSettings.heightOffset);
+
+            int digCave = (int)MeshUtils.fBM3D(x, y, z, World.caveSettings.octaves,
+                           World.caveSettings.scale, World.caveSettings.heightScale,
+                           World.caveSettings.heightOffset);
+
+            if (y == 0)
+            {
+                chunkData[i] = MeshUtils.BlockType.BEDROCK;
+                continue;
+            }
+
+            if (digCave < World.caveSettings.probability)
+            {
+                chunkData[i] = MeshUtils.BlockType.AIR;
+                continue;
+            }
+
+            if (surfaceHeight == y)
+            {
+                chunkData[i] = MeshUtils.BlockType.GRASSSIDE;
+            }
+            else if(y < diamondTHeight && y > diamondBHeight && UnityEngine.Random.Range(0.0f, 1.0f) <= World.diamondTSettings.probability)
+                chunkData[i] = MeshUtils.BlockType.DIAMOND;
+            else if(y < stoneHeight && UnityEngine.Random.Range(0.0f,1.0f) <= World.stoneSettings.probability)
+                chunkData[i] = MeshUtils.BlockType.STONE;
+            else if (y < surfaceHeight)
                 chunkData[i] = MeshUtils.BlockType.DIRT;
             else
-                chunkData[i] = MeshUtils.BlockType.GRASSTOP;
+                chunkData[i] = MeshUtils.BlockType.AIR;
+
+
         }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+
+    }
+
+    public void CreateChunk(Vector3 dimensions, Vector3 position)
+    {
+        location = position;
+        width = (int) dimensions.x;
+        height = (int)dimensions.y;
+        depth = (int)dimensions.z;
+
+
+
         MeshFilter mf = this.gameObject.AddComponent<MeshFilter>();
         MeshRenderer mr = this.gameObject.AddComponent<MeshRenderer>();
         mr.material = atlas;
@@ -56,7 +119,7 @@ public class Chunk : MonoBehaviour
             {
                 for (int x = 0; x < width; x++)
                 {
-                    blocks[x, y, z] = new Block(new Vector3(x, y, z), chunkData[x + width * (y + depth * z)], this);
+                    blocks[x, y, z] = new Block(new Vector3(x, y, z) + location, chunkData[x + width * (y + depth * z)], this);
                     if (blocks[x, y, z].mesh != null)
                     {
                         inputMeshes.Add(blocks[x, y, z].mesh);
@@ -83,7 +146,7 @@ public class Chunk : MonoBehaviour
 
         var handle = jobs.Schedule(inputMeshes.Count, 4);
         var newMesh = new Mesh();
-        newMesh.name = "Chunk";
+        newMesh.name = "Chunk_" + location.x + "_" + location.y + "_" + location.z;
         var sm = new SubMeshDescriptor(0, triStart, MeshTopology.Triangles);
         sm.firstVertex = 0;
         sm.vertexCount = vertexStart;
@@ -99,7 +162,8 @@ public class Chunk : MonoBehaviour
         newMesh.RecalculateBounds();
 
         mf.mesh = newMesh;
-
+        MeshCollider collider = this.gameObject.AddComponent<MeshCollider>();
+        collider.sharedMesh = mf.mesh;
     }
 
     [BurstCompile]

@@ -18,7 +18,7 @@ public class Quad
         int[] triangles = new int[6];
 		triangles = new int[] { 3, 1, 0, 3, 2, 1 };
 
-		Vector2 uv00 = MeshUtils.blockUVs[(int)bType,0];
+		Vector2 uv00 = MeshUtils.blockUVs[(int)bType, 0];
         Vector2 uv10 = MeshUtils.blockUVs[(int)bType, 1];
 		Vector2 uv01 = MeshUtils.blockUVs[(int)bType, 2];
 		Vector2 uv11 = MeshUtils.blockUVs[(int)bType, 3];
