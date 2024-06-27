@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: sand
   sprite: {fileID: 1435527331, guid: 383aef37898fa624db3efdbee6c0df52, type: 3}
-  prefab: {fileID: 7526398570608063699, guid: 5d26f4211430cbd4d93c7d0958697f80, type: 3}
   itemTag: 0
+  buildType: 5

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: snow
   sprite: {fileID: 1220149751, guid: 383aef37898fa624db3efdbee6c0df52, type: 3}
-  prefab: {fileID: 5074063181294829125, guid: 008db0529d52a9e449fc613c2ec9958b, type: 3}
   itemTag: 0
+  buildType: 6

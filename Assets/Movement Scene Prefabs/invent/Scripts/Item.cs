@@ -7,6 +7,6 @@ public class Item : ScriptableObject
 {
     public string itemName;
     public Sprite sprite;
-    public GameObject prefab;
     public SlotTag itemTag;
+    public int buildType; 
 }

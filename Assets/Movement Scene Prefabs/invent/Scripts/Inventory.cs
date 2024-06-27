@@ -18,6 +18,7 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] Transform draggablesTransform;
     [SerializeField] InventoryItem itemPrefab;
+    [SerializeField] World world;
 
     [Header("Item List")]
     [SerializeField] Item[] items;
@@ -78,7 +79,7 @@ public class Inventory : MonoBehaviour
 
         if (hotbarSlots[selectedIndex].myItem != null)
         {
-            playerActions.selectedBlock = hotbarSlots[selectedIndex].myItem.myItem.prefab;
+            world.SetBuildType(hotbarSlots[selectedIndex].myItem.myItem.buildType);
         }
         else
         {

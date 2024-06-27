@@ -48,12 +48,15 @@ public class World : MonoBehaviour
 
     public static PerlinSettings caveSettings;
     public Perlin3DGrapher caves;
-    
+
     public HashSet<Vector3Int> chunkChecker = new HashSet<Vector3Int>();
     public HashSet<Vector2Int> chunkColumns = new HashSet<Vector2Int>();
     public Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
 
     public GameObject destroyEffectPrefab;
+    public AudioClip destroySound;
+    public AudioClip placeSound;
+    public AudioSource audioSource;
 
     Vector3Int lastBuildPosition;
     int drawRadius = 3;
@@ -160,115 +163,159 @@ public class World : MonoBehaviour
             StartCoroutine(LoadWorldFromFile());
         else
             StartCoroutine(BuildWorld());
+
+        if (audioSource != null)
+        {
+            audioSource.spatialBlend = 1.0f;
+        }
     }
 
-    MeshUtils.BlockType buildType = MeshUtils.BlockType.DIRT;
+    MeshUtils.BlockType? buildType = null;
     public void SetBuildType(int type)
     {
-        buildType = (MeshUtils.BlockType) type;
+        buildType = (MeshUtils.BlockType)type;
     }
 
     void Update()
     {
-       
+
     }
 
     public void WorldManipulation()
     {
-        
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 10))
+
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 10))
+        {
+            Vector3 hitBlock = Vector3.zero;
+            if (Input.GetMouseButtonDown(0))
             {
-                Vector3 hitBlock = Vector3.zero;
-                if (Input.GetMouseButtonDown(0))
-                {
-                    hitBlock = hit.point - hit.normal / 2.0f;
-                }
-                else
-                    hitBlock = hit.point + hit.normal / 2.0f;
-
-                //Debug.Log("Block Location: " + hitBlock.x + "," + hitBlock.y + "," + hitBlock.z);
-                Chunk thisChunk = hit.collider.gameObject.GetComponent<Chunk>();
-
-                int bx = (int)(Mathf.Round(hitBlock.x) - thisChunk.location.x);
-                int by = (int)(Mathf.Round(hitBlock.y) - thisChunk.location.y);
-                int bz = (int)(Mathf.Round(hitBlock.z) - thisChunk.location.z);
-
-                Vector3Int neighbour;
-                if (bx == chunkDimensions.x)
-                {
-                    neighbour = new Vector3Int((int)thisChunk.location.x + chunkDimensions.x,
-                                                (int)thisChunk.location.y,
-                                                 (int)thisChunk.location.z);
-                    thisChunk = chunks[neighbour];
-                    bx = 0;
-                }
-                else if (bx == -1)
-                {
-                    neighbour = new Vector3Int((int)thisChunk.location.x - chunkDimensions.x,
-                                                (int)thisChunk.location.y,
-                                                 (int)thisChunk.location.z);
-                    thisChunk = chunks[neighbour];
-                    bx = chunkDimensions.x - 1;
-                }
-                else if (by == chunkDimensions.y)
-                {
-                    neighbour = new Vector3Int((int)thisChunk.location.x,
-                                                (int)thisChunk.location.y + chunkDimensions.y,
-                                                 (int)thisChunk.location.z);
-                    thisChunk = chunks[neighbour];
-                    by = 0;
-                }
-                else if (by == -1)
-                {
-                    neighbour = new Vector3Int((int)thisChunk.location.x,
-                                                (int)thisChunk.location.y - chunkDimensions.y,
-                                                 (int)thisChunk.location.z);
-                    thisChunk = chunks[neighbour];
-                    by = chunkDimensions.y - 1;
-                }
-                else if (bz == chunkDimensions.z)
-                {
-                    neighbour = new Vector3Int((int)thisChunk.location.x,
-                                                (int)thisChunk.location.y,
-                                                 (int)thisChunk.location.z + chunkDimensions.z);
-                    thisChunk = chunks[neighbour];
-                    bz = 0;
-                }
-                else if (bz == -1)
-                {
-                    neighbour = new Vector3Int((int)thisChunk.location.x,
-                                                (int)thisChunk.location.y,
-                                                 (int)thisChunk.location.z - chunkDimensions.z);
-                    thisChunk = chunks[neighbour];
-                    bz = chunkDimensions.z - 1;
-                }
-
-
-                int i = bx + chunkDimensions.x * (by + chunkDimensions.z * bz);
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    if (MeshUtils.blockTypeHealth[(int)thisChunk.chunkData[i]] != -1)
-                    {
-                        if (thisChunk.healthData[i] == MeshUtils.BlockType.NOCRACK)
-                            StartCoroutine(HealBlock(thisChunk, i));
-                        thisChunk.healthData[i]++;
-                        if (thisChunk.healthData[i] == MeshUtils.BlockType.NOCRACK +
-                                                       MeshUtils.blockTypeHealth[(int)thisChunk.chunkData[i]])
-                            thisChunk.chunkData[i] = MeshUtils.BlockType.AIR;
-                    }
-                }
-                else
-                {
-                    thisChunk.chunkData[i] = buildType;
-                    thisChunk.healthData[i] = MeshUtils.BlockType.NOCRACK;
-                }
-
-                RedrawChunk(thisChunk);
+                hitBlock = hit.point - hit.normal / 2.0f;
             }
-        
+            else
+            {
+                if (buildType == null) // Check if buildType is set
+                {
+                    return; // Exit the method if buildType is not set
+                }
+                hitBlock = hit.point + hit.normal / 2.0f;
+            }
+
+            //Debug.Log("Block Location: " + hitBlock.x + "," + hitBlock.y + "," + hitBlock.z);
+            Chunk thisChunk = hit.collider.gameObject.GetComponent<Chunk>();
+
+            int bx = (int)(Mathf.Round(hitBlock.x) - thisChunk.location.x);
+            int by = (int)(Mathf.Round(hitBlock.y) - thisChunk.location.y);
+            int bz = (int)(Mathf.Round(hitBlock.z) - thisChunk.location.z);
+
+            Vector3Int neighbour;
+            if (bx == chunkDimensions.x)
+            {
+                neighbour = new Vector3Int((int)thisChunk.location.x + chunkDimensions.x,
+                                            (int)thisChunk.location.y,
+                                             (int)thisChunk.location.z);
+                thisChunk = chunks[neighbour];
+                bx = 0;
+            }
+            else if (bx == -1)
+            {
+                neighbour = new Vector3Int((int)thisChunk.location.x - chunkDimensions.x,
+                                            (int)thisChunk.location.y,
+                                             (int)thisChunk.location.z);
+                thisChunk = chunks[neighbour];
+                bx = chunkDimensions.x - 1;
+            }
+            else if (by == chunkDimensions.y)
+            {
+                neighbour = new Vector3Int((int)thisChunk.location.x,
+                                            (int)thisChunk.location.y + chunkDimensions.y,
+                                             (int)thisChunk.location.z);
+                thisChunk = chunks[neighbour];
+                by = 0;
+            }
+            else if (by == -1)
+            {
+                neighbour = new Vector3Int((int)thisChunk.location.x,
+                                            (int)thisChunk.location.y - chunkDimensions.y,
+                                             (int)thisChunk.location.z);
+                thisChunk = chunks[neighbour];
+                by = chunkDimensions.y - 1;
+            }
+            else if (bz == chunkDimensions.z)
+            {
+                neighbour = new Vector3Int((int)thisChunk.location.x,
+                                            (int)thisChunk.location.y,
+                                             (int)thisChunk.location.z + chunkDimensions.z);
+                thisChunk = chunks[neighbour];
+                bz = 0;
+            }
+            else if (bz == -1)
+            {
+                neighbour = new Vector3Int((int)thisChunk.location.x,
+                                            (int)thisChunk.location.y,
+                                             (int)thisChunk.location.z - chunkDimensions.z);
+                thisChunk = chunks[neighbour];
+                bz = chunkDimensions.z - 1;
+            }
+
+
+            int i = bx + chunkDimensions.x * (by + chunkDimensions.z * bz);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (MeshUtils.blockTypeHealth[(int)thisChunk.chunkData[i]] != -1)
+                {
+                    if (thisChunk.healthData[i] == MeshUtils.BlockType.NOCRACK)
+                        StartCoroutine(HealBlock(thisChunk, i));
+                    thisChunk.healthData[i]++;
+                    if (thisChunk.healthData[i] == MeshUtils.BlockType.NOCRACK +
+                                                   MeshUtils.blockTypeHealth[(int)thisChunk.chunkData[i]])
+                        thisChunk.chunkData[i] = MeshUtils.BlockType.AIR;
+                    PlayDestroyEffect(hit.point);
+                }
+            }
+            else
+            {
+                thisChunk.chunkData[i] = buildType.Value;
+                thisChunk.healthData[i] = MeshUtils.BlockType.NOCRACK;
+                PlayPlaceEffect(hit.point);
+            }
+
+            RedrawChunk(thisChunk);
+        }
+
+    }
+
+    void PlayDestroyEffect(Vector3 position)
+    {
+        if (destroyEffectPrefab != null)
+        {
+            GameObject effect = Instantiate(destroyEffectPrefab, position, Quaternion.identity);
+            ParticleSystem particleSystem = effect.GetComponent<ParticleSystem>();
+            if (particleSystem != null)
+            {
+                particleSystem.Play();
+            }
+            Destroy(effect, 2f); // Destroy the effect after 2 seconds
+        }
+
+        // Play the destroy sound effect
+        if (audioSource != null && destroySound != null)
+        {
+            audioSource.transform.position = position; // Set the audio source position to the block position
+            audioSource.PlayOneShot(destroySound);
+        }
+    }
+
+    void PlayPlaceEffect(Vector3 position)
+    {
+        // Play the place sound effect
+        if (audioSource != null && placeSound != null)
+        {
+            audioSource.transform.position = position; // Set the audio source position to the block position
+            audioSource.PlayOneShot(placeSound);
+        }
     }
 
     void RedrawChunk(Chunk c)
@@ -306,8 +353,8 @@ public class World : MonoBehaviour
                 chunks.Add(position, c);
             }
             chunks[position].meshRenderer.enabled = meshEnabled;
-            
-            
+
+
         }
         chunkColumns.Add(new Vector2Int(x, z));
     }
@@ -354,7 +401,7 @@ public class World : MonoBehaviour
                 loadingBar.value++;
                 yield return null;
             }
-            
+
         }
 
         mCamera.SetActive(false);
