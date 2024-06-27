@@ -384,12 +384,8 @@ public class World : MonoBehaviour
                 BuildChunkColumn(x * chunkDimensions.x, z * chunkDimensions.z, false);
                 yield return null;
             }
-
         }
-
-
     }
-
 
     IEnumerator BuildWorld()
     {

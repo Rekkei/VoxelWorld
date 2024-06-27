@@ -127,7 +127,7 @@ public class Chunk : MonoBehaviour
     public void CreateChunk(Vector3 dimensions, Vector3 position, bool rebuildBlocks = true)
     {
         location = position;
-        width = (int) dimensions.x;
+        width = (int)dimensions.x;
         height = (int)dimensions.y;
         depth = (int)dimensions.z;
 
@@ -136,7 +136,7 @@ public class Chunk : MonoBehaviour
         meshRenderer = mr;
         mr.material = atlas;
         blocks = new Block[width, height, depth];
-        if(rebuildBlocks)
+        if (rebuildBlocks)
             BuildChunk();
 
         var inputMeshes = new List<Mesh>();
@@ -201,6 +201,7 @@ public class Chunk : MonoBehaviour
         mf.mesh = newMesh;
         MeshCollider collider = this.gameObject.AddComponent<MeshCollider>();
         collider.sharedMesh = mf.mesh;
+        this.gameObject.layer = LayerMask.NameToLayer("Ground");
     }
 
     [BurstCompile]
@@ -275,6 +276,6 @@ public class Chunk : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

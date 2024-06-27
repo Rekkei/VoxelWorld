@@ -83,7 +83,6 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            playerActions.selectedBlock = null;
         }
 
         hotbarSlots[selectedIndex].GetComponent<Image>().color = Color.yellow;

@@ -4,15 +4,9 @@ public class PlayerActions : MonoBehaviour
 {
     [Header("Temporary")]
     public GameObject destroyEffectPrefab;
-    public GameObject selectedBlock = null;
 
     [SerializeField] private World world;
     private static bool canAct = true;
-
-    private void Start()
-    {
-        selectedBlock = null;
-    }
 
     void Update()
     {
