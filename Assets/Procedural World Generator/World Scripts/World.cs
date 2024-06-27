@@ -167,8 +167,12 @@ public class World : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-        {
+       
+    }
+
+    public void WorldManipulation()
+    {
+        
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 10))
@@ -261,7 +265,7 @@ public class World : MonoBehaviour
 
                 RedrawChunk(thisChunk);
             }
-        }
+        
     }
 
     void RedrawChunk(Chunk c)
