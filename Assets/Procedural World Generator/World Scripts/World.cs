@@ -139,7 +139,6 @@ public class World : MonoBehaviour
 
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         loadingBar.maxValue = worldDimensions.x * worldDimensions.z;
@@ -176,14 +175,35 @@ public class World : MonoBehaviour
         buildType = (MeshUtils.BlockType)type;
     }
 
-    void Update()
+    public Bounds GetPlayerBounds()
     {
+        Collider playerCollider = fpc.GetComponent<Collider>();
+        if (playerCollider != null)
+        {
+            return playerCollider.bounds;
+        }
 
+        Vector3 playerPosition = fpc.transform.position;
+        Vector3 playerSize = new Vector3(0.3f, 1f, 0.3f);
+        return new Bounds(playerPosition, playerSize);
+    }
+
+    public Bounds GetPlayerExclusionZone(float buffer = 0.5f)
+    {
+        Bounds playerBounds = GetPlayerBounds();
+        // Expand the bounds by the buffer
+        playerBounds.Expand(buffer);
+        return playerBounds;
+    }
+
+    public bool IsBlockInPlayerZone(Bounds blockBounds)
+    {
+        Bounds exclusionZone = GetPlayerExclusionZone();
+        return exclusionZone.Intersects(blockBounds);
     }
 
     public void WorldManipulation()
     {
-
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 10))
@@ -202,65 +222,16 @@ public class World : MonoBehaviour
                 hitBlock = hit.point + hit.normal / 2.0f;
             }
 
-            //Debug.Log("Block Location: " + hitBlock.x + "," + hitBlock.y + "," + hitBlock.z);
             Chunk thisChunk = hit.collider.gameObject.GetComponent<Chunk>();
 
             int bx = (int)(Mathf.Round(hitBlock.x) - thisChunk.location.x);
             int by = (int)(Mathf.Round(hitBlock.y) - thisChunk.location.y);
             int bz = (int)(Mathf.Round(hitBlock.z) - thisChunk.location.z);
 
-            Vector3Int neighbour;
-            if (bx == chunkDimensions.x)
-            {
-                neighbour = new Vector3Int((int)thisChunk.location.x + chunkDimensions.x,
-                                            (int)thisChunk.location.y,
-                                             (int)thisChunk.location.z);
-                thisChunk = chunks[neighbour];
-                bx = 0;
-            }
-            else if (bx == -1)
-            {
-                neighbour = new Vector3Int((int)thisChunk.location.x - chunkDimensions.x,
-                                            (int)thisChunk.location.y,
-                                             (int)thisChunk.location.z);
-                thisChunk = chunks[neighbour];
-                bx = chunkDimensions.x - 1;
-            }
-            else if (by == chunkDimensions.y)
-            {
-                neighbour = new Vector3Int((int)thisChunk.location.x,
-                                            (int)thisChunk.location.y + chunkDimensions.y,
-                                             (int)thisChunk.location.z);
-                thisChunk = chunks[neighbour];
-                by = 0;
-            }
-            else if (by == -1)
-            {
-                neighbour = new Vector3Int((int)thisChunk.location.x,
-                                            (int)thisChunk.location.y - chunkDimensions.y,
-                                             (int)thisChunk.location.z);
-                thisChunk = chunks[neighbour];
-                by = chunkDimensions.y - 1;
-            }
-            else if (bz == chunkDimensions.z)
-            {
-                neighbour = new Vector3Int((int)thisChunk.location.x,
-                                            (int)thisChunk.location.y,
-                                             (int)thisChunk.location.z + chunkDimensions.z);
-                thisChunk = chunks[neighbour];
-                bz = 0;
-            }
-            else if (bz == -1)
-            {
-                neighbour = new Vector3Int((int)thisChunk.location.x,
-                                            (int)thisChunk.location.y,
-                                             (int)thisChunk.location.z - chunkDimensions.z);
-                thisChunk = chunks[neighbour];
-                bz = chunkDimensions.z - 1;
-            }
-
-
             int i = bx + chunkDimensions.x * (by + chunkDimensions.z * bz);
+
+            Vector3 blockPosition = new Vector3(bx, by, bz) + thisChunk.location;
+            Bounds blockBounds = new Bounds(blockPosition, Vector3.one);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -277,6 +248,12 @@ public class World : MonoBehaviour
             }
             else
             {
+                if (IsBlockInPlayerZone(blockBounds))
+                {
+                    Debug.Log("Cannot place block: Player is in or near the block's position.");
+                    return;
+                }
+
                 thisChunk.chunkData[i] = buildType.Value;
                 thisChunk.healthData[i] = MeshUtils.BlockType.NOCRACK;
                 PlayPlaceEffect(hit.point);
@@ -284,7 +261,6 @@ public class World : MonoBehaviour
 
             RedrawChunk(thisChunk);
         }
-
     }
 
     void PlayDestroyEffect(Vector3 position)
@@ -297,23 +273,21 @@ public class World : MonoBehaviour
             {
                 particleSystem.Play();
             }
-            Destroy(effect, 2f); // Destroy the effect after 2 seconds
+            Destroy(effect, 2f);
         }
 
-        // Play the destroy sound effect
         if (audioSource != null && destroySound != null)
         {
-            audioSource.transform.position = position; // Set the audio source position to the block position
+            audioSource.transform.position = position;
             audioSource.PlayOneShot(destroySound);
         }
     }
 
     void PlayPlaceEffect(Vector3 position)
     {
-        // Play the place sound effect
         if (audioSource != null && placeSound != null)
         {
-            audioSource.transform.position = position; // Set the audio source position to the block position
+            audioSource.transform.position = position;
             audioSource.PlayOneShot(placeSound);
         }
     }
@@ -353,9 +327,8 @@ public class World : MonoBehaviour
                 chunks.Add(position, c);
             }
             chunks[position].meshRenderer.enabled = meshEnabled;
-
-
         }
+
         chunkColumns.Add(new Vector2Int(x, z));
     }
 
@@ -366,7 +339,6 @@ public class World : MonoBehaviour
         int xEnd = worldDimensions.x + extraWorldDimensions.x;
         int xStart = worldDimensions.x - 1;
 
-
         for (int z = zStart; z < zEnd; z++)
         {
             for (int x = 0; x < xEnd; x++)
@@ -374,7 +346,6 @@ public class World : MonoBehaviour
                 BuildChunkColumn(x * chunkDimensions.x, z * chunkDimensions.z, false);
                 yield return null;
             }
-
         }
 
         for (int z = 0; z < zEnd; z++)
@@ -397,7 +368,6 @@ public class World : MonoBehaviour
                 loadingBar.value++;
                 yield return null;
             }
-
         }
 
         mCamera.SetActive(false);
@@ -428,6 +398,7 @@ public class World : MonoBehaviour
                 buildQueue.Enqueue(BuildRecursiveWorld(posx, posz, drawRadius));
                 buildQueue.Enqueue(HideColumns(posx, posz));
             }
+
             yield return wfs;
         }
     }
@@ -454,6 +425,7 @@ public class World : MonoBehaviour
                 HideChunkColumn(cc.x, cc.y);
             }
         }
+
         yield return null;
     }
 

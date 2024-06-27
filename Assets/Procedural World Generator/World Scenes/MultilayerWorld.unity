@@ -305,7 +305,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 0.8415094, g: 0.727772, b: 0.41757914, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -1026,10 +1026,6 @@ PrefabInstance:
       propertyPath: world
       value: 
       objectReference: {fileID: 250808994}
-    - target: {fileID: 8738388084946243352, guid: 8c3995fcbc5c41849b2e3ed770c07d83, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8738388084946243354, guid: 8c3995fcbc5c41849b2e3ed770c07d83, type: 3}
       propertyPath: cam
       value: 
@@ -1038,10 +1034,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 31081993}
-    - target: {fileID: 8738388084946243357, guid: 8c3995fcbc5c41849b2e3ed770c07d83, type: 3}
-      propertyPath: jumpForce
-      value: 6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c3995fcbc5c41849b2e3ed770c07d83, type: 3}
 --- !u!1 &1510321632
