@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 public class Chunk : MonoBehaviour
 {
     public Material atlas;
-
+    public PhysicMaterial material;
     public int width = 2;
     public int height = 2;
     public int depth = 2;
@@ -140,6 +140,7 @@ public class Chunk : MonoBehaviour
         // Set collider size and center if needed
         boxcollider.size = new Vector3(1f, 1f, 1f); // Adjust size according to your block dimensions
         boxcollider.center = new Vector3(0.5f, 0.5f, 0.5f); // Adjust center position if necessary
+        boxcollider.material = material;
 
         meshRenderer = mr;
         mr.material = atlas;
