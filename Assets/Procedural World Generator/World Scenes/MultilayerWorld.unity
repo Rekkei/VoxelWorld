@@ -1022,6 +1022,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8236603652136770751, guid: 8c3995fcbc5c41849b2e3ed770c07d83, type: 3}
+      propertyPath: m_UseGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8236603652136770751, guid: 8c3995fcbc5c41849b2e3ed770c07d83, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8236603652136770751, guid: 8c3995fcbc5c41849b2e3ed770c07d83, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8738388084946243352, guid: 8c3995fcbc5c41849b2e3ed770c07d83, type: 3}
       propertyPath: world
       value: 
