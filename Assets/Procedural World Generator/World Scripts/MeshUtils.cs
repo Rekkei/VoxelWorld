@@ -10,7 +10,7 @@ public static class MeshUtils {
     };
 
     public static int[] blockTypeHealth =
-    { 2, 2, 1, 1, 4, 3, 4, -1, 3, 4, -1, -1, -1, -1, -1, -1
+    { 1, 1, 1, 1, 1, 1, 1, -1, 1, 1, -1, -1, -1, -1, -1, -1
     };
 
     public enum BlockSide { BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK };
