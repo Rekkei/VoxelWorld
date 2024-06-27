@@ -15,7 +15,6 @@ public class ActionBar : MonoBehaviour
 
     void Start()
     {
-        playerActions.selectedBlock = blockPrefabs[selectedIndex];
         itemSlots[selectedIndex].GetComponent<Image>().color = Color.yellow;
         UpdateItemSlotTexts();
     }
@@ -39,9 +38,6 @@ public class ActionBar : MonoBehaviour
         }
 
         selectedIndex = index;
-
-        playerActions.selectedBlock = blockPrefabs[index];
-        Debug.Log(playerActions.selectedBlock.name);
 
         itemSlots[selectedIndex].GetComponent<Image>().color = Color.yellow;
 
