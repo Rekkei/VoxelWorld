@@ -21,7 +21,6 @@ public struct PerlinSettings
     }
 }
 
-
 public class World : MonoBehaviour
 {
     public static Vector3Int worldDimensions = new Vector3Int(5, 5, 5);
@@ -32,6 +31,9 @@ public class World : MonoBehaviour
     public GameObject mCamera;
     public GameObject fpc;
     public Slider loadingBar;
+
+    public string GameSeed = "Default";
+    public int currentSeed = 0;
 
     public static PerlinSettings surfaceSettings;
     public PerlinGrapher surface;
@@ -47,7 +49,7 @@ public class World : MonoBehaviour
 
     public static PerlinSettings caveSettings;
     public Perlin3DGrapher caves;
-    
+
     public HashSet<Vector3Int> chunkChecker = new HashSet<Vector3Int>();
     public HashSet<Vector2Int> chunkColumns = new HashSet<Vector2Int>();
     public Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
@@ -136,6 +138,8 @@ public class World : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        InitializeSeed();
+
         loadingBar.maxValue = worldDimensions.x * worldDimensions.z;
 
         surfaceSettings = new PerlinSettings(surface.heightScale, surface.scale,
@@ -159,10 +163,16 @@ public class World : MonoBehaviour
             StartCoroutine(BuildWorld());
     }
 
+    void InitializeSeed()
+    {
+        currentSeed = GameSeed.GetHashCode();
+        Random.InitState(currentSeed);
+    }
+
     MeshUtils.BlockType buildType = MeshUtils.BlockType.DIRT;
     public void SetBuildType(int type)
     {
-        buildType = (MeshUtils.BlockType) type;
+        buildType = (MeshUtils.BlockType)type;
     }
 
     void Update()
@@ -298,8 +308,8 @@ public class World : MonoBehaviour
                 chunks.Add(position, c);
             }
             chunks[position].meshRenderer.enabled = meshEnabled;
-            
-            
+
+
         }
         chunkColumns.Add(new Vector2Int(x, z));
     }
@@ -346,7 +356,7 @@ public class World : MonoBehaviour
                 loadingBar.value++;
                 yield return null;
             }
-            
+
         }
 
         mCamera.SetActive(false);
