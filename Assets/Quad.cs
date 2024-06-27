@@ -28,7 +28,7 @@ public class Quad
         Vector2 uv10 = MeshUtils.blockUVs[(int)bType, 1];
 		Vector2 uv01 = MeshUtils.blockUVs[(int)bType, 2];
 		Vector2 uv11 = MeshUtils.blockUVs[(int)bType, 3];
-
+		
 		Vector3 p0 = new Vector3(-0.5f, -0.5f, 0.5f) + offset;
         Vector3 p1 = new Vector3(0.5f, -0.5f, 0.5f) + offset;
         Vector3 p2 = new Vector3(0.5f, -0.5f, -0.5f) + offset;

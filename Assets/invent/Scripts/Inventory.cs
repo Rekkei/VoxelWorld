@@ -22,8 +22,8 @@ public class Inventory : MonoBehaviour
     [Header("Item List")]
     [SerializeField] Item[] items;
 
-    [Header("Debug")]
-    [SerializeField] Button giveItemBtn;
+    //[Header("Debug")]
+    //[SerializeField] Button giveItemBtn;
 
     [Header("Hotbar Selection")]
     [SerializeField] private PlayerActions playerActions;
@@ -32,7 +32,7 @@ public class Inventory : MonoBehaviour
     void Awake()
     {
         Singleton = this;
-        giveItemBtn.onClick.AddListener(delegate { SpawnInventoryItem(); });
+        //giveItemBtn.onClick.AddListener(delegate { SpawnInventoryItem(); });
     }
 
     void Start()
