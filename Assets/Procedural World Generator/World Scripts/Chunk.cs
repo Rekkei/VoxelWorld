@@ -5,11 +5,12 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Unity.VisualScripting;
 
 public class Chunk : MonoBehaviour
 {
     public Material atlas;
-
+    public PhysicMaterial material;
     public int width = 2;
     public int height = 2;
     public int depth = 2;
@@ -24,6 +25,7 @@ public class Chunk : MonoBehaviour
     public MeshUtils.BlockType[] chunkData;
     public MeshUtils.BlockType[] healthData;
     public MeshRenderer meshRenderer;
+
 
     CalculateBlockTypes calculateBlockTypes;
     JobHandle jobHandle;
@@ -118,6 +120,7 @@ public class Chunk : MonoBehaviour
         healthTypes.Dispose();
     }
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,6 +136,11 @@ public class Chunk : MonoBehaviour
 
         MeshFilter mf = this.gameObject.AddComponent<MeshFilter>();
         MeshRenderer mr = this.gameObject.AddComponent<MeshRenderer>();
+        BoxCollider boxcollider = this.gameObject.AddComponent<BoxCollider>();
+        boxcollider.size = new Vector3(1f, 1f, 1f); 
+        boxcollider.center = new Vector3(0.5f, 0.5f, 0.5f);
+        boxcollider.material = material;
+
         meshRenderer = mr;
         mr.material = atlas;
         blocks = new Block[width, height, depth];
