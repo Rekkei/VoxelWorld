@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +52,8 @@ public class World : MonoBehaviour
     public HashSet<Vector3Int> chunkChecker = new HashSet<Vector3Int>();
     public HashSet<Vector2Int> chunkColumns = new HashSet<Vector2Int>();
     public Dictionary<Vector3Int, Chunk> chunks = new Dictionary<Vector3Int, Chunk>();
+
+    public GameObject destroyEffectPrefab;
 
     Vector3Int lastBuildPosition;
     int drawRadius = 3;
@@ -273,6 +276,7 @@ public class World : MonoBehaviour
         DestroyImmediate(c.GetComponent<MeshFilter>());
         DestroyImmediate(c.GetComponent<MeshRenderer>());
         DestroyImmediate(c.GetComponent<Collider>());
+
         c.CreateChunk(chunkDimensions, c.location, false);
     }
 
