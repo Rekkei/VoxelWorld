@@ -201,6 +201,7 @@ public class Chunk : MonoBehaviour
         mf.mesh = newMesh;
         MeshCollider collider = this.gameObject.AddComponent<MeshCollider>();
         collider.sharedMesh = mf.mesh;
+        this.gameObject.layer = LayerMask.NameToLayer("Ground");
     }
 
     [BurstCompile]
