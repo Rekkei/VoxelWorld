@@ -9,6 +9,8 @@ public class Block {
 
     public Block(Vector3 offset, MeshUtils.BlockType type, Chunk chunk, MeshUtils.BlockType htype)
     {
+        
+
         parentChunk = chunk;
         Vector3 blockLocalPos = offset - chunk.location;
 

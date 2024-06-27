@@ -5,6 +5,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Unity.VisualScripting;
 
 public class Chunk : MonoBehaviour
 {
@@ -118,6 +119,7 @@ public class Chunk : MonoBehaviour
         healthTypes.Dispose();
     }
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,6 +135,12 @@ public class Chunk : MonoBehaviour
 
         MeshFilter mf = this.gameObject.AddComponent<MeshFilter>();
         MeshRenderer mr = this.gameObject.AddComponent<MeshRenderer>();
+        // Inside Block class constructor
+        BoxCollider boxcollider = this.gameObject.AddComponent<BoxCollider>();
+        // Set collider size and center if needed
+        boxcollider.size = new Vector3(1f, 1f, 1f); // Adjust size according to your block dimensions
+        boxcollider.center = new Vector3(0.5f, 0.5f, 0.5f); // Adjust center position if necessary
+
         meshRenderer = mr;
         mr.material = atlas;
         blocks = new Block[width, height, depth];
