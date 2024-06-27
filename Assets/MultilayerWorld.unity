@@ -990,7 +990,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4a362db7e97dc854c997080817611163, type: 2}
   - {fileID: 11400000, guid: f82adff1839e7cd479652607fbea8a00, type: 2}
   - {fileID: 11400000, guid: 2edf32809f90ff343a412cb809fb521d, type: 2}
-  giveItemBtn: {fileID: 0}
   playerActions: {fileID: 32462876}
 --- !u!1 &485383735
 GameObject:
@@ -5714,8 +5713,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4a362db7e97dc854c997080817611163, type: 2}
   - {fileID: 11400000, guid: f82adff1839e7cd479652607fbea8a00, type: 2}
   - {fileID: 11400000, guid: 2edf32809f90ff343a412cb809fb521d, type: 2}
-  giveItemBtn: {fileID: 0}
-  playerActions: {fileID: 0}
+  playerActions: {fileID: 32462876}
 --- !u!1 &1776288617
 GameObject:
   m_ObjectHideFlags: 0
