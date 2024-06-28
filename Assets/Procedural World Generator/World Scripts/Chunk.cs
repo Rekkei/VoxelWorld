@@ -5,12 +5,11 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Unity.VisualScripting;
 
 public class Chunk : MonoBehaviour
 {
     public Material atlas;
-   
+
     public int width = 2;
     public int height = 2;
     public int depth = 2;
@@ -26,7 +25,6 @@ public class Chunk : MonoBehaviour
     public MeshUtils.BlockType[] healthData;
     public MeshRenderer meshRenderer;
     public PhysicMaterial material0;
-
 
     CalculateBlockTypes calculateBlockTypes;
     JobHandle jobHandle;
@@ -121,7 +119,6 @@ public class Chunk : MonoBehaviour
         healthTypes.Dispose();
     }
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -137,13 +134,12 @@ public class Chunk : MonoBehaviour
 
         MeshFilter mf = this.gameObject.AddComponent<MeshFilter>();
         MeshRenderer mr = this.gameObject.AddComponent<MeshRenderer>();
-        // Inside Block class constructor
-        BoxCollider boxcollider = this.gameObject.AddComponent<BoxCollider>();
-        // Set collider size and center if needed
-        boxcollider.size = new Vector3(1f, 1f, 1f); // Adjust size according to your block dimensions
-        boxcollider.center = new Vector3(0.5f, 0.5f, 0.5f); // Adjust center position if necessary
-        boxcollider.material = material0;
 
+        //BoxCollider boxcollider = this.gameObject.AddComponent<BoxCollider>();
+        //// Set collider size and center if needed
+        //boxcollider.size = new Vector3(1f, 1f, 1f); // Adjust size according to your block dimensions
+        //boxcollider.center = new Vector3(0.5f, 0.5f, 0.5f); // Adjust center position if necessary
+        //boxcollider.material = material0;
 
         meshRenderer = mr;
         mr.material = atlas;
@@ -213,6 +209,7 @@ public class Chunk : MonoBehaviour
         mf.mesh = newMesh;
         MeshCollider collider = this.gameObject.AddComponent<MeshCollider>();
         collider.sharedMesh = mf.mesh;
+        collider.material = material0;
         this.gameObject.layer = LayerMask.NameToLayer("Ground");
     }
 
