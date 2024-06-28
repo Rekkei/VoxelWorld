@@ -27,7 +27,7 @@ public class World : MonoBehaviour
 {
     public static Vector3Int worldDimensions = new Vector3Int(5, 5, 5);
     public static Vector3Int extraWorldDimensions = new Vector3Int(5, 5, 5);
-    public static Vector3Int chunkDimensions = new Vector3Int(10, 10, 10);
+    public static Vector3Int chunkDimensions = new Vector3Int(5, 5, 5);
     public bool loadFromFile = false;
     public GameObject chunkPrefab;
     public GameObject mCamera;

@@ -305,7 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 6084151654743117870}
   moveSpeed: 6.49
-  jumpForce: 5
+  jumpForce: 4.5
   crouchScale: 0.75
   crouchSpeed: 1
   walkSpeed: 4
