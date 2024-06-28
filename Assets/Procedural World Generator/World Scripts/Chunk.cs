@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 public class Chunk : MonoBehaviour
 {
     public Material atlas;
-    public PhysicMaterial material;
+   
     public int width = 2;
     public int height = 2;
     public int depth = 2;
@@ -136,10 +136,7 @@ public class Chunk : MonoBehaviour
 
         MeshFilter mf = this.gameObject.AddComponent<MeshFilter>();
         MeshRenderer mr = this.gameObject.AddComponent<MeshRenderer>();
-        BoxCollider boxcollider = this.gameObject.AddComponent<BoxCollider>();
-        boxcollider.size = new Vector3(1f, 1f, 1f); 
-        boxcollider.center = new Vector3(0.5f, 0.5f, 0.5f);
-        boxcollider.material = material;
+        
 
         meshRenderer = mr;
         mr.material = atlas;
