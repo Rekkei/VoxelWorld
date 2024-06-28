@@ -279,8 +279,10 @@ public class World : MonoBehaviour
                     thisChunk.healthData[i]++;
                     if (thisChunk.healthData[i] == MeshUtils.BlockType.NOCRACK +
                                                    MeshUtils.blockTypeHealth[(int)thisChunk.chunkData[i]])
+                    {
                         thisChunk.chunkData[i] = MeshUtils.BlockType.AIR;
-                    PlayDestroyEffect(hit.point);
+                        PlayDestroyEffect(hit.point);
+                    }
                 }
             }
 
@@ -315,7 +317,7 @@ public class World : MonoBehaviour
 
         if (audioSource != null && destroySound != null)
         {
-            audioSource.transform.position = position;
+            //audioSource.transform.position = position;
             audioSource.PlayOneShot(destroySound);
         }
     }
@@ -324,7 +326,7 @@ public class World : MonoBehaviour
     {
         if (audioSource != null && placeSound != null)
         {
-            audioSource.transform.position = position;
+            //audioSource.transform.position = position;
             audioSource.PlayOneShot(placeSound);
         }
     }
