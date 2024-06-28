@@ -22,7 +22,6 @@ public struct PerlinSettings
     }
 }
 
-
 public class World : MonoBehaviour
 {
     public static Vector3Int worldDimensions = new Vector3Int(5, 5, 5);
@@ -48,6 +47,8 @@ public class World : MonoBehaviour
 
     public static PerlinSettings caveSettings;
     public Perlin3DGrapher caves;
+
+    public GameObject voxelWorld;
 
     public HashSet<Vector3Int> chunkChecker = new HashSet<Vector3Int>();
     public HashSet<Vector2Int> chunkColumns = new HashSet<Vector2Int>();
@@ -109,6 +110,7 @@ public class World : MonoBehaviour
         {
             GameObject chunk = Instantiate(chunkPrefab);
             chunk.name = "Chunk_" + chunkPos.x + "_" + chunkPos.y + "_" + chunkPos.z;
+            chunk.transform.parent = voxelWorld.transform;
             Chunk c = chunk.GetComponent<Chunk>();
             int blockCount = chunkDimensions.x * chunkDimensions.y * chunkDimensions.z;
             c.chunkData = new MeshUtils.BlockType[blockCount];
@@ -294,6 +296,7 @@ public class World : MonoBehaviour
     {
         GameObject chunk = Instantiate(chunkPrefab);
         chunk.name = "Chunk_" + position.x + "_" + position.y + "_" + position.z;
+        chunk.transform.parent = voxelWorld.transform;
         Chunk c = chunk.GetComponent<Chunk>();
         c.CreateChunk(chunkDimensions, position);
         chunkChecker.Add(position);
@@ -360,6 +363,7 @@ public class World : MonoBehaviour
             {
                 GameObject chunk = Instantiate(chunkPrefab);
                 chunk.name = "Chunk_" + position.x + "_" + position.y + "_" + position.z;
+                chunk.transform.parent = voxelWorld.transform;
                 Chunk c = chunk.GetComponent<Chunk>();
                 c.CreateChunk(chunkDimensions, position);
                 chunkChecker.Add(position);
