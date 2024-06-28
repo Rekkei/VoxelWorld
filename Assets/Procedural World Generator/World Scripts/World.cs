@@ -191,7 +191,6 @@ public class World : MonoBehaviour
     public Bounds GetPlayerExclusionZone(float buffer = 0.5f)
     {
         Bounds playerBounds = GetPlayerBounds();
-        // Expand the bounds by the buffer
         playerBounds.Expand(buffer);
         return playerBounds;
     }
@@ -209,17 +208,19 @@ public class World : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 10))
         {
             Vector3 hitBlock = Vector3.zero;
-            if (Input.GetMouseButtonDown(0))
+            bool placingBlock = !Input.GetMouseButtonDown(0);
+
+            if (placingBlock)
             {
-                hitBlock = hit.point - hit.normal / 2.0f;
+                if (buildType == null)
+                {
+                    return;
+                }
+                hitBlock = hit.point + hit.normal / 2.0f;
             }
             else
             {
-                if (buildType == null) // Check if buildType is set
-                {
-                    return; // Exit the method if buildType is not set
-                }
-                hitBlock = hit.point + hit.normal / 2.0f;
+                hitBlock = hit.point - hit.normal / 2.0f;
             }
 
             Chunk thisChunk = hit.collider.gameObject.GetComponent<Chunk>();
@@ -228,12 +229,48 @@ public class World : MonoBehaviour
             int by = (int)(Mathf.Round(hitBlock.y) - thisChunk.location.y);
             int bz = (int)(Mathf.Round(hitBlock.z) - thisChunk.location.z);
 
+            Vector3Int blockPosition = new Vector3Int(bx, by, bz);
+            Vector3 globalBlockPosition = blockPosition + thisChunk.location;
+            Bounds blockBounds = new Bounds(globalBlockPosition, Vector3.one);
+
+            if (bx < 0 || bx >= chunkDimensions.x || by < 0 || by >= chunkDimensions.y || bz < 0 || bz >= chunkDimensions.z)
+            {
+                Vector3Int neighborChunkPos = Vector3Int.FloorToInt(thisChunk.location);
+
+                if (bx < 0) neighborChunkPos.x -= chunkDimensions.x;
+                else if (bx >= chunkDimensions.x) neighborChunkPos.x += chunkDimensions.x;
+
+                if (by < 0) neighborChunkPos.y -= chunkDimensions.y;
+                else if (by >= chunkDimensions.y) neighborChunkPos.y += chunkDimensions.y;
+
+                if (bz < 0) neighborChunkPos.z -= chunkDimensions.z;
+                else if (bz >= chunkDimensions.z) neighborChunkPos.z += chunkDimensions.z;
+
+                if (!chunks.TryGetValue(neighborChunkPos, out thisChunk))
+                {
+                    thisChunk = CreateChunk(neighborChunkPos);
+                }
+
+                bx = (int)(Mathf.Round(hitBlock.x) - thisChunk.location.x);
+                by = (int)(Mathf.Round(hitBlock.y) - thisChunk.location.y);
+                bz = (int)(Mathf.Round(hitBlock.z) - thisChunk.location.z);
+            }
+
             int i = bx + chunkDimensions.x * (by + chunkDimensions.z * bz);
 
-            Vector3 blockPosition = new Vector3(bx, by, bz) + thisChunk.location;
-            Bounds blockBounds = new Bounds(blockPosition, Vector3.one);
+            if (placingBlock)
+            {
+                if (IsBlockInPlayerZone(blockBounds))
+                {
+                    Debug.Log("Cannot place block: Player is in or near the block's position.");
+                    return;
+                }
 
-            if (Input.GetMouseButtonDown(0))
+                thisChunk.chunkData[i] = buildType.Value;
+                thisChunk.healthData[i] = MeshUtils.BlockType.NOCRACK;
+                PlayPlaceEffect(hit.point);
+            }
+            else
             {
                 if (MeshUtils.blockTypeHealth[(int)thisChunk.chunkData[i]] != -1)
                 {
@@ -246,22 +283,22 @@ public class World : MonoBehaviour
                     PlayDestroyEffect(hit.point);
                 }
             }
-            else
-            {
-                if (IsBlockInPlayerZone(blockBounds))
-                {
-                    Debug.Log("Cannot place block: Player is in or near the block's position.");
-                    return;
-                }
-
-                thisChunk.chunkData[i] = buildType.Value;
-                thisChunk.healthData[i] = MeshUtils.BlockType.NOCRACK;
-                PlayPlaceEffect(hit.point);
-            }
 
             RedrawChunk(thisChunk);
         }
     }
+
+    private Chunk CreateChunk(Vector3Int position)
+    {
+        GameObject chunk = Instantiate(chunkPrefab);
+        chunk.name = "Chunk_" + position.x + "_" + position.y + "_" + position.z;
+        Chunk c = chunk.GetComponent<Chunk>();
+        c.CreateChunk(chunkDimensions, position);
+        chunkChecker.Add(position);
+        chunks.Add(position, c);
+        return c;
+    }
+
 
     void PlayDestroyEffect(Vector3 position)
     {
