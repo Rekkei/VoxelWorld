@@ -24,6 +24,7 @@ public class Chunk : MonoBehaviour
     public MeshUtils.BlockType[] chunkData;
     public MeshUtils.BlockType[] healthData;
     public MeshRenderer meshRenderer;
+    public PhysicMaterial material0;
 
     CalculateBlockTypes calculateBlockTypes;
     JobHandle jobHandle;
@@ -133,6 +134,13 @@ public class Chunk : MonoBehaviour
 
         MeshFilter mf = this.gameObject.AddComponent<MeshFilter>();
         MeshRenderer mr = this.gameObject.AddComponent<MeshRenderer>();
+
+        //BoxCollider boxcollider = this.gameObject.AddComponent<BoxCollider>();
+        //// Set collider size and center if needed
+        //boxcollider.size = new Vector3(1f, 1f, 1f); // Adjust size according to your block dimensions
+        //boxcollider.center = new Vector3(0.5f, 0.5f, 0.5f); // Adjust center position if necessary
+        //boxcollider.material = material0;
+
         meshRenderer = mr;
         mr.material = atlas;
         blocks = new Block[width, height, depth];
@@ -201,6 +209,7 @@ public class Chunk : MonoBehaviour
         mf.mesh = newMesh;
         MeshCollider collider = this.gameObject.AddComponent<MeshCollider>();
         collider.sharedMesh = mf.mesh;
+        collider.material = material0;
         this.gameObject.layer = LayerMask.NameToLayer("Ground");
     }
 
