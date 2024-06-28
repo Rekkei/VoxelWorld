@@ -115,8 +115,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        Vector3 newPosition = rb.position + movement * moveSpeed * Time.deltaTime;
-        rb.MovePosition(newPosition);
+        Vector3 moveVelocity = movement * moveSpeed;
+        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
     }
 
     void Crouch()
