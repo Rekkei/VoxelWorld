@@ -32,6 +32,8 @@ public class World : MonoBehaviour
     public GameObject mCamera;
     public GameObject fpc;
     public Slider loadingBar;
+    public GameObject UI;
+    public GameObject loadingScreen;
 
     public static PerlinSettings surfaceSettings;
     public PerlinGrapher surface;
@@ -134,7 +136,9 @@ public class World : MonoBehaviour
         fpc.transform.position = new Vector3(wd.fpcX, wd.fpcY, wd.fpcZ);
         mCamera.SetActive(false);
         fpc.SetActive(true);
-        loadingBar.gameObject.SetActive(false);
+        //loadingBar.gameObject.SetActive(false);
+        loadingScreen.gameObject.SetActive(false);
+        UI.gameObject.SetActive(true);
         lastBuildPosition = Vector3Int.CeilToInt(fpc.transform.position);
         StartCoroutine(BuildCoordinator());
         StartCoroutine(UpdateWorld());
