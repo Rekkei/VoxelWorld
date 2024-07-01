@@ -8,5 +8,6 @@ public class Item : ScriptableObject
     public string itemName;
     public Sprite sprite;
     public SlotTag itemTag;
-    public int buildType; 
+    public int buildType;
+    public int maxStackSize = 64;
 }

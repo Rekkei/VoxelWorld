@@ -34,6 +34,7 @@ public class Inventory : MonoBehaviour
     {
         Singleton = this;
         giveItemBtn.onClick.AddListener(delegate { SpawnInventoryItem(); });
+        InitializeInventory(); // Add this line
     }
 
     void Start()
@@ -155,10 +156,15 @@ public class Inventory : MonoBehaviour
 
         for (int i = 0; i < inventorySlots.Length; i++)
         {
-            // Check if the slot is empty
+            // Check if the slot is empty or contains the same item type and can stack
             if (inventorySlots[i].myItem == null)
             {
                 Instantiate(itemPrefab, inventorySlots[i].transform).Initialize(_item, inventorySlots[i]);
+                break;
+            }
+            else if (inventorySlots[i].myItem.myItem == _item && inventorySlots[i].myItem.stackSize < _item.maxStackSize)
+            {
+                inventorySlots[i].myItem.AddToStack(1);
                 break;
             }
         }
@@ -168,5 +174,16 @@ public class Inventory : MonoBehaviour
     {
         int random = Random.Range(0, items.Length);
         return items[random];
+    }
+
+    private void InitializeInventory() // Add this method
+    {
+        for (int i = 0; i < inventorySlots.Length; i++)
+        {
+            if (i < items.Length)
+            {
+                SpawnInventoryItem(items[i]);
+            }
+        }
     }
 }

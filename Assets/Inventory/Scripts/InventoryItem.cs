@@ -11,6 +11,7 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
 
     public Item myItem { get; set; }
     public InventorySlot activeSlot { get; set; }
+    public int stackSize { get; private set; } // Add this line
 
     void Awake()
     {
@@ -18,12 +19,23 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         itemIcon = GetComponent<Image>();
     }
 
-    public void Initialize(Item item, InventorySlot parent)
+    public void Initialize(Item item, InventorySlot parent, int initialStackSize = 1) // Modify this line
     {
         activeSlot = parent;
         activeSlot.myItem = this;
         myItem = item;
         itemIcon.sprite = item.sprite;
+        stackSize = initialStackSize;
+    }
+
+    public bool AddToStack(int amount)
+    {
+        if (stackSize + amount <= myItem.maxStackSize)
+        {
+            stackSize += amount;
+            return true;
+        }
+        return false;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -34,3 +46,4 @@ public class InventoryItem : MonoBehaviour, IPointerClickHandler
         }
     }
 }
+
